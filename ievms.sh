@@ -74,7 +74,7 @@ download() { # name url path md5
 
     log "Downloading ${1} from ${2} to ${3} (attempt ${attempt} of ${max})"
     curl ${curl_opts} -L "${2}" -o "${3}" || fail "Failed to download ${2} to ${ievms_home}/${3} using 'curl', error code ($?)"
-    check_md5 "${3}" "${4}" && return 0
+    "${3}" "${4}" && return 0
 
     if [ "${attempt}" == "${max}" ]
     then
