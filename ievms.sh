@@ -67,7 +67,7 @@ download() { # name url path md5
     if [[ -f "${3}" ]]
     then
         log "Found ${1} at ${3} - skipping download"
-        check_md5 "${3}" "${4}" && return 0
+        "${3}" "${4}" && return 0
         log "Check failed - redownloading ${1}"
         rm -f "${3}"
     fi
