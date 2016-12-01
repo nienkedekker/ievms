@@ -67,12 +67,14 @@ download() { # name url path md5
     if [[ -f "${3}" ]]
     then
         log "Found ${1} at ${3} - skipping download"
+        check_md5 "${3}" "${4}" && return 0
         log "Check failed - redownloading ${1}"
         rm -f "${3}"
     fi
 
     log "Downloading ${1} from ${2} to ${3} (attempt ${attempt} of ${max})"
     curl ${curl_opts} -L "${2}" -o "${3}" || fail "Failed to download ${2} to ${ievms_home}/${3} using 'curl', error code ($?)"
+    check_md5 "${3}" "${4}" && return 0
 
     if [ "${attempt}" == "${max}" ]
     then
@@ -161,10 +163,10 @@ check_ext_pack() {
 
 # Download and install `unar` from Google Code.
 install_unar() {
-    local url="http://unarchiver.c3.cx/downloads/TheUnarchiver3.11.1.zip"
+    local url="http://wakaba.c3.cx/releases/TheUnarchiver/unar1.10.1.zip"
     local archive=`basename "${url}"`
 
-    download "unar" "${url}" "${archive}" 
+    download "unar" "${url}" "${archive}" "d548661e4b6c33512074df81e39ed874"
 
     unzip "${archive}" || fail "Failed to extract ${ievms_home}/${archive} to ${ievms_home}/, unzip command returned error code $?"
 
@@ -385,8 +387,7 @@ build_ievm() {
     local url
     if [ "${os}" == "Win10" ]
     then
-        url="https://az792536.vo.msecnd.net/vms/VMBuild_20160802/VirtualBox/MSEdge/MSEdge.Win10_RS1.VirtualBox.zip"
-        ova="MSEdge - Win10_preview.ova"
+        url="https://az792536.vo.msecnd.net/vms/VMBuild_20150801/VirtualBox/MSEdge/Mac/Microsoft%20Edge.Win10.For.Mac.VirtualBox.zip"
     else
         url="http://virtualization.modern.ie/vhd/IEKitV1_Final/VirtualBox/OSX/${archive}"
     fi
@@ -398,7 +399,7 @@ build_ievm() {
         IE8_Win7.zip) md5="21b0aad3d66dac7f88635aa2318a3a55" ;;
         IE9_Win7.zip) md5="58d201fe7dc7e890ad645412264f2a2c" ;;
         IE10_Win8.zip) md5="cc4e2f4b195e1b1e24e2ce6c7a6f149c" ;;
-        MSEdge_Win10.zip) md5="467d8286cb8cbed90f0761c3566abdda" ;;
+        MSEdge_Win10.zip) md5="c1011b491d49539975fb4c3eeff16dae" ;;
     esac
     
     log "Checking for existing OVA at ${ievms_home}/${ova}"
@@ -472,7 +473,7 @@ build_ievm_ie10() {
         boot_auto_ga "IE10 - Win8"
     else
         boot_auto_ga "IE10 - Win7"
-        install_ie_win7 "IE10 - Win7" "http://download.digiex.net/Apps/InternetExplorer/IE10-Windows6.1-x86-en-us.exe" "0f14b2de0b3cef611b9c1424049e996b"
+        install_ie_win7 "IE10 - Win7" "http://download.microsoft.com/download/8/A/C/8AC7C482-BC74-492E-B978-7ED04900CEDE/IE10-Windows6.1-x86-en-us.exe" "0f14b2de0b3cef611b9c1424049e996b"
     fi
 }
 
