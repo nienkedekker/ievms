@@ -166,7 +166,7 @@ install_unar() {
     local url="http://theunarchiver.googlecode.com/files/unar1.5.zip"
     local archive=`basename "${url}"`
 
-    download "unar" "${url}" "${archive}" "fbf544d1332c481d7d0f4e3433fbe53b"
+    download "unar" "${url}" "${archive}" "ae4362c240eb7909fcda1ce2f26cfb36"
 
     unzip "${archive}" || fail "Failed to extract ${ievms_home}/${archive} to ${ievms_home}/, unzip command returned error code $?"
 
